@@ -1,0 +1,7 @@
+.iconWrapper {
+    display: inline;
+    border-radius: 50px;
+    background-color: #fff;
+    padding: 10px;
+    box-shadow: 0 0 10px rgb(0 0 0 / 0.2);
+  }

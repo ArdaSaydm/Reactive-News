@@ -1,0 +1,21 @@
+.list {
+  background-color: var(--1-f7f7f7);
+  border-radius: 30px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: auto;
+  grid-gap: 2rem;
+  padding: 20px;
+}
+
+@media only screen and (max-width: 1000px) {
+  .list {
+    background-color: var(--1-f7f7f7);
+    border-radius: 30px;
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    grid-auto-rows: auto;
+    grid-gap: 2rem;
+    padding: 20px;
+  }
+}

@@ -1,0 +1,24 @@
+.infos {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 10px 0 10px;
+}
+
+.image {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
+  border-radius: 30px;
+  width: 100%;
+}
+
+.icon {
+  width: 42px;
+  height: 42px;
+}
+
+.dateParagraph {
+  color: var(--5-707070);
+  text-align: left;
+  letter-spacing: 0px;
+}
