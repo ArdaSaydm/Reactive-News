@@ -78,3 +78,11 @@
   padding-bottom: 5px;
   color: var(--neon-blue);
 }
+
+
+.searchList{
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
+    justify-self: flex-start;
+}

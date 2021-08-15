@@ -1,19 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { registerLocale, setDefaultLocale } from 'react-datepicker';
 import tr from 'date-fns/locale/tr';
 import classes from './Filters.module.css';
+
 import filterRegular from '../../assets/icons/filter-regular@2x.png';
-import dateIcon from '../../assets/icons/Group-1163@2x.png';
 import categoriesIcon from '../../assets/icons/categories.png';
 import sortingIcon from '../../assets/icons/sorting.png';
 import userIcon from '../../assets/icons/user-circle-solid@2x.png';
+import dateIcon from '../../assets/icons/Group-1163@2x.png';
+
 import Card from '../../ui/card/Card';
 import sortingConsts from '../../consts/sortingConsts';
 registerLocale('tr', tr);
 
 function Filters(props) {
+  const [categoryFilter, setCategoryFilter] = useState(0);
+  const [sortingFilter, setSortingFilter] = useState(1);
+  const [authorFilter, setAuthorFilter] = useState(0);
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+
+  const handleFilter = (
+    categoryId,
+    sortingId,
+    editorId,
+    startDate,
+    endDate
+  ) => {
+    props.setCategoryFilter(parseInt(categoryId));
+    props.setSortingFilter(parseInt(sortingId));
+    props.setAuthorFilter(parseInt(editorId));
+    props.setStartDate(startDate);
+    props.setEndDate(endDate);
+    props.setFakeLoading(true);
+  };
+
   return (
     <Card style={{ marginTop: '80px' }}>
       <div className={classes.filterAlignment}>
@@ -28,25 +51,25 @@ function Filters(props) {
           <img src={dateIcon} className={classes.icon} alt='icon' />
           <label className={classes.title}>Tarih Aralığı</label>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <div className={classes.flexListColumn}>
           <DatePicker
-            selected={props.startDate}
-            onChange={(date) => props.setStartDate(date)}
-            className={classes.inputStyle}
+            selected={startDate}
+            onChange={(date) => setStartDate(date)}
+            className={classes.datePickerInputStyle}
             maxDate={new Date()}
             locale='tr'
-            dateFormat="dd/MM/yyyy"
+            dateFormat='dd/MM/yyyy'
             placeholderText='Başlangıç'
           />
           <br />
           <DatePicker
-            selected={props.endDate}
-            onChange={(date) => props.setEndDate(date)}
-            locale='tr'
-            minDate={props.startDate}
+            selected={endDate}
+            className={classes.datePickerInputStyle}
+            onChange={(date) => setEndDate(date)}
+            minDate={startDate}
             maxDate={new Date()}
-            dateFormat="dd/MM/yyyy"
-            className={classes.inputStyle}
+            locale='tr'
+            dateFormat='dd/MM/yyyy'
             placeholderText='Bugün'
           />{' '}
         </div>
@@ -55,17 +78,17 @@ function Filters(props) {
           <img src={categoriesIcon} className={classes.icon} alt='icon' />
           <label className={classes.title}>Kategoriler</label>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <div className={classes.flexListColumn}>
           <select
-            value={props.categoryFilter}
+            value={categoryFilter}
             name='categories'
             id='categories'
-            className={classes.inputStyle}
-            onChange={(e) => props.setCategoryFilter(parseInt(e.target.value))}>
+            onChange={(e) => setCategoryFilter(parseInt(e.target.value))}
+            className={classes.inputStyle}>
             <option value='0'>Tümü</option>
             {props.allDatas.categories.map((category) => {
               return (
-                <option value={category.id} selected>
+                <option key={category.id} value={category.id} defaultValue>
                   {category.title}
                 </option>
               );
@@ -77,13 +100,17 @@ function Filters(props) {
           <img src={sortingIcon} className={classes.icon} alt='icon' />
           <label className={classes.title}>Sıralama</label>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <div className={classes.flexListColumn}>
           <select
-            value={props.sortingFilter}
-            onChange={(e) => props.setSortingFilter(parseInt(e.target.value))}
+            value={sortingFilter}
+            onChange={(e) => setSortingFilter(parseInt(e.target.value))}
             className={classes.inputStyle}>
             {sortingConsts.map((sorting) => {
-              return <option value={sorting.id}>{sorting.title}</option>;
+              return (
+                <option key={sorting.id} value={sorting.id}>
+                  {sorting.title}
+                </option>
+              );
             })}
           </select>
         </div>
@@ -92,14 +119,19 @@ function Filters(props) {
           <img src={userIcon} className={classes.icon} alt='icon' />
           <label className={classes.title}>Editör</label>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <div className={classes.flexListColumn}>
           <select
-            value={props.authorFilter}
+            value={authorFilter}
             className={classes.inputStyle}
-            onChange={(e) => props.setAuthorFilter(parseInt(e.target.value))}>
+            onChange={(e) => setAuthorFilter(parseInt(e.target.value))}>
+            {' '}
             <option value='0'>Tümü</option>
             {props.allDatas.authors.map((author) => {
-              return <option value={author.id}>{author.title}</option>;
+              return (
+                <option key={author.id} value={author.id}>
+                  {author.title}
+                </option>
+              );
             })}
           </select>
         </div>
@@ -110,7 +142,17 @@ function Filters(props) {
           justifyContent: 'flex-end',
           marginTop: '20px',
         }}>
-        <button className={classes.button}>
+        <button
+          className={classes.button}
+          onClick={() =>
+            handleFilter(
+              categoryFilter,
+              sortingFilter,
+              authorFilter,
+              startDate,
+              endDate
+            )
+          }>
           <h3 style={{ color: 'white' }}>Filtrele</h3>
         </button>
       </div>

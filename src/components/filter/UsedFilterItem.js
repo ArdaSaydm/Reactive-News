@@ -5,9 +5,9 @@ function UsedFilterItem(props) {
   return (
     <div className={classes.badge}>
       <div className={classes.centerItems}>
-        <img src={props.icon} className={classes.icon} alt='icon' />
+        <img src={props.icon} className={classes.icon} alt='filter-icon' />
         <span>{props.title}</span>
-        <img src={timesLightIcon} style={{ marginLeft: '10px' }} alt='icon' />
+        <img src={timesLightIcon} className={classes.closeButton} onClick={()=>props.setFilter(props.initialData)} alt='close-icon' />
       </div>
     </div>
   );

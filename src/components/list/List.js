@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useRef } from 'react';
 
 import ListItem from './ListItem';
 import classes from './List.module.css';
@@ -11,42 +11,110 @@ const override = css`
   border-color: 'var(--neon-blue)';
 `;
 
-function List(props) {
-  const [isFakeLoading, setFakeLoading] = useState(true);
-  const [items, setItems] = useState([]);
+const usePreviousValue = value => {
+  const ref = useRef();
+  useEffect(() => {
+    ref.current = value;
+  });
+  return ref.current;
+};
 
+
+
+function List(props) {
   useEffect(async () => {
     setTimeout(
       function () {
-        //Start the timer
-        setFakeLoading(false);
+        props.setFakeLoading(false);
       }.bind(this),
       2000
     );
-  }, [isFakeLoading]);
+  }, [props.isFakeLoading, props.shuffle]);
 
-  if (isFakeLoading)
+  if (props.isFakeLoading)
     return (
       <ClipLoader
         color={'var(--neon-blue)'}
-        loading={isFakeLoading}
+        loading={props.isFakeLoading}
         css={override}
         size={150}
       />
     );
 
-  const filtered = props.allDatas.content.filter((data) => {
-    // Category Filtering
-    if(props.categoryFilter == 0 )
-    return true;
-    if (
-      data.category.includes(props.categoryFilter) && data.category.includes(props.authorFilter) && new Date(props.startDate).getTime() / 1000 < data.published && new Date(props.endDate).getTime() / 1000 > data.published
-    ) {
-      return true;
-    }else{
-      return false;
-    }
-  });
+  const filtered = props.allDatas.content
+    .filter((data) => {
+      // Category Filtering
+      if (props.categoryFilter === 0) return true;
+
+      if (data.category.includes(props.categoryFilter)) {
+        return true;
+      } else {
+        return false;
+      }
+    })
+    .filter((data) => {
+      // Category Filter
+      if (props.authorFilter === 0) return true;
+
+      if (data.category.includes(props.authorFilter)) {
+        return true;
+      } else {
+        return false;
+      }
+    })
+    .filter((data) => {
+      // Author Filter
+      if (props.authorFilter === 0) return true;
+
+      if (data.author === props.authorFilter) {
+        return true;
+      } else {
+        return false;
+      }
+    })
+    .filter((data) => {
+      // Author Filter
+      if (props.startDate === '') return true;
+
+      if (data.published >= new Date(props.startDate).getTime() / 1000) {
+        return true;
+      } else {
+        return false;
+      }
+    })
+    .filter((data) => {
+      // Author Filter
+      if (props.endDate === '') return true;
+
+      if (data.published <= new Date(props.endDate).getTime() / 1000) {
+        return true;
+      } else {
+        return false;
+      }
+    })
+    .filter((data) => {
+      // SearchBar Filtering
+      if (props.searchedNews === '') return true;
+
+      if (
+        data.title.toLowerCase().startsWith(props.searchedNews.toLowerCase())
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    })
+    .sort((a, b) => {
+      if (props.sortingFilter === 1) {
+        return b.published - a.published;
+      } else {
+        return a.published - b.published;
+      }
+    })
+    .sort((a, b) => {
+      if(props.prevShuffle != props.shuffle)
+        return 0.5 - Math.random();
+    });
 
   return (
     <div>

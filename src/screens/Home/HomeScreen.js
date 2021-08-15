@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useRef } from 'react';
 
 import List from '../../components/list/List';
 import classes from './HomeScreen.module.css';
@@ -23,12 +23,16 @@ const override = css`
 function HomeScreen() {
   const [allDatas, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+
   const [categoryFilter, setCategoryFilter] = useState(0);
   const [authorFilter, setAuthorFilter] = useState(0);
   const [sortingFilter, setSortingFilter] = useState(1);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+  const [shuffle, setShuffle] = useState(0);
+
   const [searchedNews, setSearchedNews] = useState('');
+  const [isFakeLoading, setFakeLoading] = useState(true);
 
   useEffect(async () => {
     const fetchData = async () => {
@@ -40,6 +44,16 @@ function HomeScreen() {
 
     fetchData();
   }, []);
+
+  const usePreviousValue = value => {
+    const ref = useRef();
+    useEffect(() => {
+      ref.current = value;
+    });
+    return ref.current;
+  };
+
+  const prevShuffle = usePreviousValue(shuffle);
 
   if (!allDatas)
     return (
@@ -53,6 +67,7 @@ function HomeScreen() {
           searchedNews={searchedNews}
           setSearchedNews={setSearchedNews}
           allDatas={allDatas}
+          setFakeLoading={setFakeLoading}
         />
         <UsedFilterList
           categoryFilter={categoryFilter}
@@ -66,6 +81,8 @@ function HomeScreen() {
           endDate={endDate}
           setEndDate={setEndDate}
           allDatas={allDatas}
+          searchedNews={searchedNews}
+          setSearchedNews={setSearchedNews}
         />
         <List
           categoryFilter={categoryFilter}
@@ -79,6 +96,13 @@ function HomeScreen() {
           endDate={endDate}
           setEndDate={setEndDate}
           allDatas={allDatas}
+          searchedNews={searchedNews}
+          setSearchedNews={setSearchedNews}
+          setFakeLoading={setFakeLoading}
+          isFakeLoading={isFakeLoading}
+          setShuffle={setShuffle}
+          shuffle={shuffle}
+          prevShuffle={prevShuffle}
         />
       </div>
 
@@ -86,9 +110,7 @@ function HomeScreen() {
         <IconCard>
           <img
             src={randomLightIcon}
-            onClick={(e) => {
-              console.log("Shuffle Clicked")
-            }}
+            onClick = {()=>setShuffle(shuffle+1)}
             className={classes.icon}
             alt='icon'
           />
@@ -105,6 +127,7 @@ function HomeScreen() {
           endDate={endDate}
           setEndDate={setEndDate}
           allDatas={allDatas}
+          setFakeLoading={setFakeLoading}
         />
         <div></div>
       </div>

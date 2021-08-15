@@ -1,4 +1,23 @@
+.datePickerInputStyle {
+  font-weight: bold;
+  font-size: 16px;
+  color: #191919;
+  padding: 15px;
+  border: 0px;
+  box-shadow: 2px 2px 8px rgb(0 0 0 / 0.1);
+  width: 100%;
+}
+
+.datePickerInputStyle::placeholder {
+  color: #191919;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+
 .inputStyle {
+  font-weight: bold;
+  font-size: 16px;
   padding: 15px;
   border: 0px;
   box-shadow: 2px 2px 8px rgb(0 0 0 / 0.1);
@@ -52,4 +71,9 @@
   border: 0px;
   border-radius: 30px;
   background-color: #268aff;
+}
+
+.flexListColumn {
+  display: flex;
+  flex-direction: column;
 }

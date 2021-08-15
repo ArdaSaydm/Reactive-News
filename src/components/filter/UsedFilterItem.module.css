@@ -18,3 +18,12 @@
   width: 15px;
   height: 15px;
 }
+
+
+.closeButton{
+  margin-left: 10px;
+}
+
+.closeButton:hover{
+  cursor: pointer;
+}
