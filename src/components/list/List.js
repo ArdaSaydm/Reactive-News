@@ -53,16 +53,6 @@ function List(props) {
       }
     })
     .filter((data) => {
-      // Category Filter
-      if (props.authorFilter === 0) return true;
-
-      if (data.category.includes(props.authorFilter)) {
-        return true;
-      } else {
-        return false;
-      }
-    })
-    .filter((data) => {
       // Author Filter
       if (props.authorFilter === 0) return true;
 
@@ -112,7 +102,7 @@ function List(props) {
       }
     })
     .sort((a, b) => {
-      if(props.prevShuffle != props.shuffle)
+      if(props.prevShuffle !== props.shuffle)
         return 0.5 - Math.random();
     });
 
